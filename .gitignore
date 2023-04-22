@@ -29,3 +29,5 @@ experiments/results/table4
 experiments/runfiles/ip_piranha
 experiments/runfiles/ip_mpspdz
 experiments/runfiles/hosts.yml
+
+sync.patch
