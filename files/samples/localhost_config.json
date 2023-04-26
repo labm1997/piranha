@@ -15,7 +15,7 @@
     "unit_test_only": false,
 
     "_desc_debug_print": "Show debug output",
-    "debug_print": false,
+    "debug_print": true,
 
     "_desc_debug_overflow": "Test for overflow and print related debug output. Breaks security by revealing intermediary values.",
     "debug_overflow": false,
@@ -27,7 +27,7 @@
     "run_name": "piranha_localhost",
 
     "_desc_network": "Path to NN architecture to use for the run",
-    "network": "files/models/secureml-norelu.json",
+    "network": "files/models/lenet-norelu.json",
 
     "_desc_custom_epochs": "Enable custom number of epochs. Otherwise set by size of learning rate schedule",
     "custom_epochs": true,
@@ -105,8 +105,8 @@
     "print_deltas": false,
     
     "_desc_debug_all_forward": "Print debug information for all layer forward passes",
-    "debug_all_forward": false,
+    "debug_all_forward": true,
 
     "_desc_debug_all_backward": "Print debug information for all layer backward passes",
-    "debug_all_backward": false
+    "debug_all_backward": true
 }
