@@ -27,7 +27,7 @@
     "run_name": "piranha_localhost",
 
     "_desc_network": "Path to NN architecture to use for the run",
-    "network": "files/models/lenet-norelu.json",
+    "network": "files/models/secureml-norelu.json",
 
     "_desc_custom_epochs": "Enable custom number of epochs. Otherwise set by size of learning rate schedule",
     "custom_epochs": true,
@@ -105,8 +105,8 @@
     "print_deltas": false,
     
     "_desc_debug_all_forward": "Print debug information for all layer forward passes",
-    "debug_all_forward": true,
+    "debug_all_forward": false,
 
     "_desc_debug_all_backward": "Print debug information for all layer backward passes",
-    "debug_all_backward": true
+    "debug_all_backward": false
 }

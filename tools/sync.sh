@@ -1,7 +1,7 @@
 source tools/utils.sh
 
 echo "$CHECK Generating sync patch..."
-git diff > tools/sync.patch
+git diff --staged > tools/sync.patch
 
 echo "$CHECK Pushing branch to remote..."
 git push
