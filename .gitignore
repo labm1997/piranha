@@ -8,6 +8,7 @@ piranha-debug
 *.ipynb_checkpoints
 */MNIST/*
 */CIFAR10/*
+*/COVID/*
 tags
 output/
 output/*
@@ -18,7 +19,6 @@ files/IP_LAN
 files/IP_WAN
 scripts/*cifar-10*
 *.png
-*.ipynb
 experiments/results/fig4
 experiments/results/fig5
 experiments/results/fig6
