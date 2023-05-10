@@ -1,7 +1,7 @@
 {
   "name": "Maia",
   "dataset": "COVID",
-  "batch_size": 8,
+  "batch_size": 6,
   "input_size": 50176,
   "num_classes": 2,
   "model": [
@@ -19,7 +19,7 @@
       "input_dim": 1577088
     },
     {
-      "layer": "maxpool",
+      "layer": "averagepool",
       "input_hw": [222, 222],
       "in_channels": 32,
       "pool_hw": [2, 2],
@@ -39,7 +39,7 @@
       "input_dim": 760384
     },
     {
-      "layer": "maxpool",
+      "layer": "averagepool",
       "input_hw": [109, 109],
       "in_channels": 64,
       "pool_hw": [2, 2],
@@ -59,7 +59,7 @@
       "input_dim": 346112
     },
     {
-      "layer": "maxpool",
+      "layer": "averagepool",
       "input_hw": [52, 52],
       "in_channels": 128,
       "pool_hw": [2, 2],
