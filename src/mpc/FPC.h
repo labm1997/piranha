@@ -138,11 +138,8 @@ void sqrt(const FPC<T, I> &in, FPC<T, I2> &out);
 template<typename T, typename I, typename I2>
 void inverse(const FPC<T, I> &in, FPC<T, I2> &out);
 
-template<typename T, typename I, typename I2>
-void sigmoid(const FPC<T, I> &in, FPC<T, I2> &out);
-
-template<typename T, typename I, typename I2>
-void dSigmoid(const FPC<T, I> &activations, FPC<T, I2> &result);
+template<typename T, typename I, typename I2, typename I3>
+void sigmoid(const FPC<T, I> &in, FPC<T, I2> &out, FPC<T, I3> &dout);
 
 template<typename T>
 void convolution(const FPC<T> &A, const FPC<T> &B, FPC<T> &C,

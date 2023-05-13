@@ -125,11 +125,8 @@ void sqrt(const RSS<T, I> &in, RSS<T, I2> &out);
 template<typename T, typename I, typename I2>
 void inverse(const RSS<T, I> &in, RSS<T, I2> &out);
 
-template<typename T, typename I, typename I2>
-void sigmoid(const RSS<T, I> &in, RSS<T, I2> &out);
-
-template<typename T, typename I, typename I2>
-void dSigmoid(const RSS<T, I> &activations, RSS<T, I2> &result);
+template<typename T, typename I, typename I2, typename I3>
+void sigmoid(const RSS<T, I> &in, RSS<T, I2> &result, RSS<T, I3> &dResult);
 
 template<typename T>
 void convolution(const RSS<T> &A, const RSS<T> &B, RSS<T> &C,

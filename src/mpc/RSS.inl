@@ -21,6 +21,7 @@
 #include "Precompute.h"
 #include "../util/functors.h"
 #include "../util/Profiler.h"
+#include "../gpu/functors.cuh"
 
 extern Precompute PrecomputeObject;
 extern Profiler comm_profiler;
@@ -601,47 +602,58 @@ void inverse(const RSS<T, I> &in, RSS<T, I2> &out) {
     taylorSeries(in, out, 4.245, -5.857, 2.630, inv_lambda());
 }
 
-template<typename T, typename I, typename I2>
-void sigmoid(const RSS<T, I> &in, RSS<T, I2> &out) {
-    // Approximation: 1/2 + x/4 - x^3/48
-
-    // x^3/48:
-    RSS<T> a3x(out.size());
-    a3x += in;
-    a3x *= in;
-    dividePublic(a3x, (T)(1 << FLOAT_PRECISION));
-    
-    a3x *= in;
-    dividePublic(a3x, (T)(1 << FLOAT_PRECISION));
-    dividePublic(a3x, (T)48);
-
-    // x/4:
-    RSS<T> a1x(out.size());
-    a1x += in;
-    dividePublic(a1x, (T)4);
-
-    // 1/2
-    DeviceData<T> a0(out.size());
-    a0.fill((1 << FLOAT_PRECISION) / 2);
-
-    out.zero();
-    out += a3x;
-    out += a1x;
-    out += a0;
+template<typename T, typename I>
+void fastDividePublic(RSS<T, I> &a, T denominator){
+    thrust::transform(
+        a.getShare(0)->begin(), 
+        a.getShare(0)->end(), 
+        a.getShare(0)->begin(),
+        scalar_divide_functor<T>(denominator));
+    thrust::transform(
+        a.getShare(1)->begin(), 
+        a.getShare(1)->end(), 
+        a.getShare(1)->begin(),
+        scalar_divide_functor<T>(denominator));
 }
 
-template<typename T, typename I, typename I2>
-void dSigmoid(const RSS<T, I> &activations, RSS<T, I2> &result) {
-    // Approximation: dSigmoid = sigmoid * (1-sigmoid)
+template<typename T, typename I, typename I2, typename I3>
+void sigmoid(const RSS<T, I> &in, RSS<T, I2> &result, RSS<T, I3> &dResult) {
+    // Approximation: sigmoid(x) = 1/2 + x/4 - x^3/48
+    // Approximation: dSigmoid(x) = 1/4 - x^2/16
 
-    // 1-sigmoid:
-    RSS<T> a(activations.size());
-    a.fill(1);
-    a -= activations;
+    // xˆ2
+    RSS<T> x2(result.size());
+    x2 += in;
+    x2 *= in;
+    fastDividePublic(x2, (T)(1 << FLOAT_PRECISION));
 
+    // xˆ3
+    RSS<T> x3(result.size());
+    x3 += x2;
+    x3 *= in;
+    fastDividePublic(x3, (T)(1 << FLOAT_PRECISION));
+
+    // -48 x^3
+    fastDividePublic(x3, (T)(-48));
+
+    // x/4
+    RSS<T> a2(result.size());
+    a2 += in;
+    fastDividePublic(a2, (T)4);
+
+    // sigmoid(x)
     result.zero();
-    result += activations;
-    result *= a;
+    result += x3;
+    result += a2;
+    result += (1 << FLOAT_PRECISION) / 2;
+
+    // -x^2 / 16
+    fastDividePublic(x2, (T)(-16));
+
+    // dSigmoid(x)
+    dResult.zero();
+    dResult += x2;
+    dResult += (1 << FLOAT_PRECISION) / 4;
 }
 
 template<typename T>

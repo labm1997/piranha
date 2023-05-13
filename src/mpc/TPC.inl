@@ -632,18 +632,13 @@ void inverse(TPC<T, I> &in, TPC<T, I2> &out) {
     taylorSeries(in, out, 4.245, -5.857, 2.630, inv_lambda());
 }
 
-template<typename T, typename I, typename I2>
-void sigmoid(const TPC<T, I> &in, TPC<T, I2> &out) {
+template<typename T, typename I, typename I2, typename I3>
+void sigmoid(const TPC<T, I> &in, TPC<T, I2> &out, TPC<T, I3> &dout) {
     /*
      * Approximation:
      *   > sigmoid(x) = 0.494286 + 0.275589(x) + -0.038751(x^2)
      */
     // taylorSeries(in, out, 0.494286, 0.275589, -0.038751, sigmoid_lambda());
-}
-
-template<typename T, typename I, typename I2>
-void dSigmoid(const TPC<T, I> &activations, TPC<T, I2> &result) {
-    // !TOOD Implement
 }
 
 template<typename T>

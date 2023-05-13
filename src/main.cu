@@ -349,6 +349,9 @@ void train(NeuralNetwork<T, Share> *net, NeuralNetConfig *config, std::string ru
                 double comm_ms = comm_profiler.get_elapsed("comm-time");
                 printf("training comm (ms),%f\n", comm_ms);
                 printf("training computation (ms),%f\n", fw_bw_ms - comm_ms);
+
+                debug_profiler.dump_all();
+                debug_profiler.clear();
             }
 
             if (piranha_config["eval_bw_peak_memory"]) {

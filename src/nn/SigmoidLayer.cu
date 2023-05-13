@@ -67,7 +67,7 @@ void SigmoidLayer<T, Share>::forward(const Share<T> &input) {
 
     activations.zero();
 
-    sigmoid(input, activations);
+    sigmoid(input, activations, deltas);
 
     debug_profiler.accumulate("sigmoid-fw-fprop");
     this->layer_profiler.accumulate("sigmoid-forward");
@@ -109,14 +109,8 @@ void SigmoidLayer<T, Share>::backward(const Share<T> &delta, const Share<T> &for
 	this->layer_profiler.start();
     debug_profiler.start();
 
-    this->deltas.zero();
-
 	// (1) Compute backwards gradient for previous layer
-	// Share<T> zeros(delta.size());
-	// zeros.zero();
-    // selectShare(zeros, delta, reluPrime, deltas);
-    dSigmoid(activations, deltas);
-    deltas *= delta;
+    // deltas are already computed
 
     // (2) Compute gradients w.r.t. layer params and update
     // nothing for ReLU

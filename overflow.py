@@ -21,6 +21,9 @@ def mult(i1: int, i2: int):
     return (m/PRECISION_INT) % MAX_INT
 
 
+def divide(i1: int, denominator: int):
+    return int(i1 / denominator)
+
 # f1 = 1
 # i1 = to_fixed(f1)
 # f1r = to_float(i1)
@@ -28,9 +31,12 @@ def mult(i1: int, i2: int):
 
 # print("f1:", f1, "i1:", i1, "f1r:", f1r, "e1", e1)
 
+
 for i in range(10):
     x = random.random()
 
     res = x*x
     out = to_float(mult(to_fixed(x), to_fixed(x)))
     print("res:", res, "out:", out)
+
+print("res:", 0.5/48, "out:", to_float(divide(to_fixed(0.5), 48)))
