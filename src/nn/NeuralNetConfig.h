@@ -7,6 +7,7 @@
 #include "MaxpoolConfig.h"
 #include "AveragepoolConfig.h"
 #include "ReLUConfig.h"
+#include "SigmoidConfig.h"
 #include "LNConfig.h"
 #include "ResLayerConfig.h"
 #include "../globals.h"
@@ -39,6 +40,10 @@ public:
     };
 	void addLayer(ReLUConfig* relul) {
         layerConf.push_back(relul);
+        numLayers++;
+    };
+	void addLayer(SigmoidConfig* sigmoidl) {
+        layerConf.push_back(sigmoidl);
         numLayers++;
     };
 	void addLayer(MaxpoolConfig* mpl) {

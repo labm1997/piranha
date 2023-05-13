@@ -3,13 +3,16 @@ source tools/utils.sh
 echo "$CHECK Generating sync patch..."
 git diff --staged > tools/sync.patch
 
-echo "$CHECK Pushing branch to remote..."
-git push
-
 init
 
-echo "$CHECK Pulling branch from remote on server..."
-docker exec fedora /bin/ssh gabarito@localhost -p10022 'cd piranha && git pull'
+# Sync extra files if option is passed
+if [ "$1" = "--remote" ]; then
+    echo "$CHECK Pushing branch to remote..."
+    git push
+
+    echo "$CHECK Pulling branch from remote on server..."
+    docker exec fedora /bin/ssh gabarito@localhost -p10022 'cd piranha && git pull'
+fi
 
 echo "$CHECK Sending sync patch to remote server..."
 docker exec fedora /bin/scp -P10022 /mnt/Mestrado/Pesquisa/piranha/tools/sync.patch gabarito@localhost:~/piranha/sync.patch

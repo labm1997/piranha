@@ -7,6 +7,7 @@
 #include "../globals.h"
 #include "../nn/FCConfig.h"
 #include "../nn/ReLUConfig.h"
+#include "../nn/SigmoidConfig.h"
 #include "../nn/CNNConfig.h"
 #include "../nn/MaxpoolConfig.h"
 #include "../nn/LNConfig.h"
@@ -54,6 +55,12 @@ void loadModel(NeuralNetConfig* config, std::string network_filename) {
             config->addLayer(c);
         } else if (l["layer"] == "relu") {
             ReLUConfig* c = new ReLUConfig(
+                l["input_dim"],
+                MINI_BATCH_SIZE
+            );
+            config->addLayer(c);
+        } else if (l["layer"] == "sigmoid") {
+            SigmoidConfig* c = new SigmoidConfig(
                 l["input_dim"],
                 MINI_BATCH_SIZE
             );

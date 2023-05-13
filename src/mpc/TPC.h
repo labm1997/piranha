@@ -121,7 +121,10 @@ template<typename T, typename I, typename I2>
 void inverse(TPC<T, I> &in, TPC<T, I2> &out);
 
 template<typename T, typename I, typename I2>
-void sigmoid(TPC<T, I> &in, TPC<T, I2> &out);
+void sigmoid(const TPC<T, I> &in, TPC<T, I2> &out);
+
+template<typename T, typename I, typename I2>
+void dSigmoid(const TPC<T, I> &activations, TPC<T, I2> &result);
 
 template<typename T>
 void convolution(const TPC<T> &A, const TPC<T> &B, TPC<T> &C,

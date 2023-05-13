@@ -7,6 +7,7 @@
 #include "MaxpoolLayer.h"
 #include "AveragepoolLayer.h"
 #include "ReLULayer.h"
+#include "SigmoidLayer.h"
 #include "ResLayer.h"
 #include "LNLayer.h"
 #include "NeuralNetwork.h"
@@ -46,6 +47,8 @@ NeuralNetwork<T, Share>::NeuralNetwork(NeuralNetConfig* config, int seed) : inpu
 		    layers.push_back(new AveragepoolLayer<T, Share>((AveragepoolConfig *) config->layerConf[i], i, seed+i));
         } else if (config->layerConf[i]->type.compare("Res") == 0) {
             layers.push_back(new ResLayer<T, Share>((ResLayerConfig *) config->layerConf[i], i, seed+i));
+        } else if (config->layerConf[i]->type.compare("Sigmoid") == 0) {
+            layers.push_back(new SigmoidLayer<T, Share>((SigmoidConfig *) config->layerConf[i], i, seed+i));
         } else {
 			error("Only FC, CNN, ReLU, Maxpool, Averagepool, ResLayer, and LN layer types currently supported");
         }

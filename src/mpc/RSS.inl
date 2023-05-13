@@ -603,11 +603,45 @@ void inverse(const RSS<T, I> &in, RSS<T, I2> &out) {
 
 template<typename T, typename I, typename I2>
 void sigmoid(const RSS<T, I> &in, RSS<T, I2> &out) {
-    /*
-     * Approximation:
-     *   > sigmoid(x) = 0.494286 + 0.275589(x) + -0.038751(x^2)
-     */
-    taylorSeries(in, out, 0.494286, 0.275589, -0.038751, sigmoid_lambda());
+    // Approximation: 1/2 + x/4 - x^3/48
+
+    // x^3/48:
+    RSS<T> a3x(out.size());
+    a3x += in;
+    a3x *= in;
+    dividePublic(a3x, (T)(1 << FLOAT_PRECISION));
+    
+    a3x *= in;
+    dividePublic(a3x, (T)(1 << FLOAT_PRECISION));
+    dividePublic(a3x, (T)48);
+
+    // x/4:
+    RSS<T> a1x(out.size());
+    a1x += in;
+    dividePublic(a1x, (T)4);
+
+    // 1/2
+    DeviceData<T> a0(out.size());
+    a0.fill((1 << FLOAT_PRECISION) / 2);
+
+    out.zero();
+    out += a3x;
+    out += a1x;
+    out += a0;
+}
+
+template<typename T, typename I, typename I2>
+void dSigmoid(const RSS<T, I> &activations, RSS<T, I2> &result) {
+    // Approximation: dSigmoid = sigmoid * (1-sigmoid)
+
+    // 1-sigmoid:
+    RSS<T> a(activations.size());
+    a.fill(1);
+    a -= activations;
+
+    result.zero();
+    result += activations;
+    result *= a;
 }
 
 template<typename T>

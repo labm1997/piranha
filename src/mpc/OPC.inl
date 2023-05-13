@@ -343,6 +343,11 @@ void sigmoid(const OPC<T, I> &in, OPC<T, I2> &out) {
     taylorSeries(in, out, 0.494286, 0.275589, -0.038751, sigmoid_lambda());
 }
 
+template<typename T, typename I, typename I2>
+void dSigmoid(const OPC<T, I> &activations, OPC<T, I2> &result) {
+    // !TOOD Implement
+}
+
 template<typename T>
 void convolution(const OPC<T> &A, const OPC<T> &B, OPC<T> &C,
         cutlass::conv::Operator op,

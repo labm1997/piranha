@@ -128,6 +128,9 @@ void inverse(const RSS<T, I> &in, RSS<T, I2> &out);
 template<typename T, typename I, typename I2>
 void sigmoid(const RSS<T, I> &in, RSS<T, I2> &out);
 
+template<typename T, typename I, typename I2>
+void dSigmoid(const RSS<T, I> &activations, RSS<T, I2> &result);
+
 template<typename T>
 void convolution(const RSS<T> &A, const RSS<T> &B, RSS<T> &C,
         cutlass::conv::Operator op,

@@ -741,6 +741,11 @@ void sigmoid(const FPC<T, I> &in, FPC<T, I2> &out) {
     taylorSeries(in, out, 0.494286, 0.275589, -0.038751, sigmoid_lambda());
 }
 
+template<typename T, typename I, typename I2>
+void dSigmoid(const FPC<T, I> &activations, FPC<T, I2> &result) {
+    // !TOOD Implement
+}
+
 template<typename T>
 void localFprop(const FPC<T> &A, const FPC<T> &B, DeviceData<T> &C, DeviceData<T> &CPrime,
         int batchSize, int imageHeight, int imageWidth, int Din,
