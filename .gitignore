@@ -31,3 +31,5 @@ experiments/runfiles/ip_mpspdz
 experiments/runfiles/hosts.yml
 
 sync.patch
+
+c_cpp_properties.json

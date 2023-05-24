@@ -1,5 +1,16 @@
 {
   "files.associations": {
-    "vector": "cpp"
+    "vector": "cpp",
+    "*.cu": "cuda-cpp",
+    "*.cuh": "cuda-cpp",
+    "*.inl": "cuda-cpp",
+    "__mutex_base": "cpp",
+    "__threading_support": "cpp",
+    "array": "cpp",
+    "bitset": "cpp",
+    "chrono": "cpp",
+    "string": "cpp",
+    "thread": "cpp",
+    "new": "cpp"
   }
 }
