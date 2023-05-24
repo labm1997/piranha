@@ -189,7 +189,7 @@ void CNNLayer<T, Share>::backward(const Share<T> &delta, const Share<T> &forward
 
     debug_profiler.start();
 
-    dividePublic(dF, (T)1 << log_learning_rate);
+    fastDividePublic(dF, (T)1 << log_learning_rate);
     weights -= dF;
 
     debug_profiler.accumulate("cnn-bw-wupdate");

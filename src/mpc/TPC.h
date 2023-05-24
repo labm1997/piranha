@@ -103,6 +103,9 @@ void dividePublic(TPC<T, I> &a, T denominator);
 template<typename T, typename I, typename I2>
 void dividePublic(TPC<T, I> &a, DeviceData<T, I2> &denominators);
 
+template<typename T, typename I>
+void fastDividePublic(TPC<T, I> &a, T denominator);
+
 template<typename T, typename I, typename I2>
 void reconstruct(TPC<T, I> &in, DeviceData<T, I2> &out);
 

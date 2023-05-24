@@ -607,6 +607,11 @@ void dividePublic(FPC<T, I> &a, DeviceData<T, I2> &denominators) {
     a += reconstructed;
 }
 
+template<typename T, typename I>
+void fastDividePublic(FPC<T, I> &a, T denominator) {
+    // !TODO: Implement
+}
+
 template<typename T, typename I, typename I2>
 void reconstruct(FPC<T, I> &in, DeviceData<T, I2> &out) {
 

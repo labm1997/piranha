@@ -402,6 +402,11 @@ void dividePublic(TPC<T, I> &a, DeviceData<T, I2> &denominators) {
     a += reconstructed;
 }
 
+template<typename T, typename I>
+void fastDividePublic(TPC<T, I> &a, T denominator) {
+    // !TODO: Implement
+}
+
 /*
 #define MAX_BITS 30
 

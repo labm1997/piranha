@@ -176,6 +176,8 @@ void FCLayer<T, Share>::backward(const Share<T> &delta, const Share<T> &forwardI
             conf.outputDim, conf.inputDim, conf.batchSize, false, true, false,
             (T)(FLOAT_PRECISION + log_learning_rate));
 
+    fastDividePublic(dW, (T)(1 << (FLOAT_PRECISION+log_learning_rate)));
+
     if (piranha_config["debug_all_backward"]) {
         if (this->layerNum == 7) {
             printShareFinite(dW, "dW result", 1);
@@ -208,7 +210,7 @@ void FCLayer<T, Share>::backward(const Share<T> &delta, const Share<T> &forwardI
         ); 
     }
 
-    dividePublic(db, (T)1 << log_learning_rate);
+    fastDividePublic(db, (T)(1 << (FLOAT_PRECISION+log_learning_rate)));
 
     if (piranha_config["debug_all_backward"]) {
         //printShareFinite(db, "FC db (first 100)", 100);

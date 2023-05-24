@@ -455,6 +455,20 @@ void dividePublic(RSS<T, I> &a, DeviceData<T, I2> &denominators) {
     a += reconstructed;
 }
 
+template<typename T, typename I>
+void fastDividePublic(RSS<T, I> &a, T denominator){
+    thrust::transform(
+        a.getShare(0)->begin(), 
+        a.getShare(0)->end(), 
+        a.getShare(0)->begin(),
+        scalar_divide_functor<T>(denominator));
+    thrust::transform(
+        a.getShare(1)->begin(), 
+        a.getShare(1)->end(), 
+        a.getShare(1)->begin(),
+        scalar_divide_functor<T>(denominator));
+}
+
 template<typename T, typename I, typename I2>
 void reconstruct(RSS<T, I> &in, DeviceData<T, I2> &out) {
 
@@ -515,7 +529,7 @@ void matmul(const RSS<T> &a, const RSS<T> &b, RSS<T> &c,
     localMatMul(a, b, rawResult, M, N, K, transpose_a, transpose_b, transpose_c);
 
     // truncate
-    dividePublic3out3(rawResult, (T)1 << truncation, c);
+    // dividePublic3out3(rawResult, (T)1 << truncation, c);
 
     if (piranha_config["debug_overflow"]) {
         std::vector<double> actual_c(c.size());
@@ -600,20 +614,6 @@ void inverse(const RSS<T, I> &in, RSS<T, I2> &out) {
      *   > 1/x = 4.245 - 5.857(x) + 2.630(x^2)
      */
     taylorSeries(in, out, 4.245, -5.857, 2.630, inv_lambda());
-}
-
-template<typename T, typename I>
-void fastDividePublic(RSS<T, I> &a, T denominator){
-    thrust::transform(
-        a.getShare(0)->begin(), 
-        a.getShare(0)->end(), 
-        a.getShare(0)->begin(),
-        scalar_divide_functor<T>(denominator));
-    thrust::transform(
-        a.getShare(1)->begin(), 
-        a.getShare(1)->end(), 
-        a.getShare(1)->begin(),
-        scalar_divide_functor<T>(denominator));
 }
 
 template<typename T, typename I, typename I2, typename I3>
