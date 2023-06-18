@@ -9,6 +9,7 @@ piranha-debug
 */MNIST/*
 */CIFAR10/*
 */COVID/*
+*/KAGGLE/*
 tags
 output/
 output/*
