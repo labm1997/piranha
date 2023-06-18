@@ -12,7 +12,7 @@ echo "$CHECK Pulling branch from remote on server..."
 docker exec fedora /bin/ssh gabarito@localhost -p10022 'cd piranha && git pull'
 
 echo "$CHECK Sending sync patch to remote server..."
-docker exec fedora /bin/scp -P10022 /mnt/Mestrado/Pesquisa/piranha/tools/sync.patch gabarito@localhost:~/piranha/sync.patch
+docker exec fedora /bin/scp -P10022 /mnt/piranha/tools/sync.patch gabarito@localhost:~/piranha/sync.patch
 
 echo "$CHECK Applying patch on remote server..."
 docker exec fedora /bin/ssh gabarito@localhost -p10022 'cd piranha && git stash && git apply sync.patch || true'
@@ -21,10 +21,8 @@ docker exec fedora /bin/ssh gabarito@localhost -p10022 'cd piranha && git stash 
 if [ "$1" = "--files" ]; then
     # Files to sync after everything
     declare -a FILES=(
-        "./files/COVID/test_data"
-        "./files/COVID/test_labels"
-        "./files/COVID/train_data"
-        "./files/COVID/train_labels"
+        "./files/KAGGLE/test_data"
+        "./files/KAGGLE/test_labels"
     )
 
     # Sync these files
@@ -40,7 +38,7 @@ if [ "$1" = "--files" ]; then
             docker exec fedora /bin/ssh gabarito@localhost -p10022 "mkdir -p ~/piranha/$filedir"
 
             # Upload
-            docker exec fedora /bin/scp -P10022 /mnt/Mestrado/Pesquisa/piranha/$file gabarito@localhost:~/piranha/$file
+            docker exec fedora /bin/scp -P10022 /mnt/piranha/$file gabarito@localhost:~/piranha/$file
         fi
     done
 fi
