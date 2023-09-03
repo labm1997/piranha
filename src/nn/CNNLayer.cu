@@ -25,6 +25,7 @@ CNNLayer<T, Share>::CNNLayer(CNNConfig* conf, int _layerNum, int seed) : Layer<T
 	 	conf->outputFeatures, conf->filterSize, conf->stride, 
 		conf->padding, conf->batchSize),
  	weights(conf->filterSize * conf->filterSize * conf->inputFeatures * conf->outputFeatures),
+    biases(conf->outputFeatures),
  	activations(conf->batchSize * conf->outputFeatures * 
 		(((conf->imageWidth - conf->filterSize + 2*conf->padding)/conf->stride) + 1) * 
  		(((conf->imageHeight - conf->filterSize + 2*conf->padding)/conf->stride) + 1)),
@@ -54,6 +55,10 @@ void CNNLayer<T, Share>::loadSnapshot(std::string path) {
 
     std::string weights_file = path + "/weight" + std::to_string(this->layerNum);
     loadShareFromFile(weights_file, weights);
+
+
+    std::string bias_file = path + "/bias" + std::to_string(this->layerNum);
+    loadShareFromFile(bias_file, biases);
 }
 
 template<typename T, template<typename, typename...> typename Share>
@@ -61,6 +66,9 @@ void CNNLayer<T, Share>::saveSnapshot(std::string path) {
 
     std::string weights_file = path + "/weight" + std::to_string(this->layerNum);
     saveShareToFile(weights_file, weights);
+
+    std::string bias_file = path + "/bias" + std::to_string(this->layerNum);
+    saveShareToFile(bias_file, biases);
 }
 
 template<typename T, template<typename, typename...> typename Share>
@@ -96,6 +104,65 @@ void CNNLayer<T, Share>::forward(const Share<T> &input) {
             cutlass::conv::Operator::kFprop,
             conf.batchSize, conf.imageHeight, conf.imageWidth, conf.filterSize,
             conf.inputFeatures, conf.outputFeatures, conf.stride, conf.padding, FLOAT_PRECISION);
+    
+    using BufferIterator = thrust::detail::normal_iterator<thrust::device_ptr<T> >;
+    using SRIterator = typename StridedRange<BufferIterator>::iterator;
+
+    for(int share = 0; share < Share<T>::numShares(); share++){
+        auto activationsShare = activations.getShare(share);
+        auto biasesShare = biases.getShare(share);
+
+        for(int out = 0; out < conf.outputFeatures ; out++){
+            auto shift = out;
+            auto stride = conf.outputFeatures;
+            auto val = biasesShare->raw()[out];
+
+            StridedRange<BufferIterator> indexes(activationsShare->begin()+shift, activationsShare->end(), stride);
+            DeviceData<T, SRIterator> activationsShareView(indexes.begin(), indexes.end());
+            activationsShareView += val;
+        }
+    }
+    
+    // //Bs x W x H x Dout
+    // int blockSize = activations.size() / (conf.batchSize * conf.outputFeatures);
+    // for(int share = 0; share < Share<T>::numShares(); share++){
+    //     printf("share %d\n", share);
+    //     auto activationsShare = activations.getShare(share);
+    //     auto activationShareItr = activationsShare->begin();
+    //     auto biasesShare = biases.getShare(share);
+
+    //     for(int batch = 0 ; batch < conf.batchSize ; batch++){
+    //         printf(" batch %d\n", share);
+
+    //         for(int image = 0 ; image < blockSize ; image++){
+    //             printf("  image %d\n", image);
+
+    //             for(int out = 0 ; out < conf.outputFeatures ; out++){
+    //                 printf("   out %d\n", out);
+    //                 auto val = biasesShare->raw()[out];
+    //                 thrust::transform(activationShareItr, activationShareItr + 1, activationShareItr, scalar_plus_functor<T>(val));
+    //                 activationShareItr += 1;
+    //             }
+    //         }
+
+            
+    //     }
+
+    // }
+
+    // int blockSize = activations.size() / biases.size();
+    // for (int share = 0; share < Share<T>::numShares(); share++) {
+    //     auto activationsShare = activations.getShare(share);
+    //     auto activationShareItr = activationsShare->begin();
+    //     auto biasesShare = biases.getShare(share);
+
+    //     for(int biasIndex = 0 ; biasIndex < biases.size() ; biasIndex++){
+    //         auto val = biasesShare->raw()[biasIndex];
+    //         thrust::transform(activationShareItr, activationShareItr + blockSize, activationShareItr, scalar_plus_functor<T>(val));
+    //         // thrust::fill(activationShareItr, activationShareItr + blockSize, val);
+    //         activationShareItr += blockSize;
+    //     }
+    // }
 
     debug_profiler.accumulate("cnn-fw-fprop");
     this->layer_profiler.accumulate("cnn-fw-fprop");

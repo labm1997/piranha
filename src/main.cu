@@ -44,7 +44,7 @@ size_t db_layer_max_bytes = 0;
 size_t db_max_bytes = 0;
 
 size_t train_dataset_size = 60000;
-size_t test_dataset_size = 10000;
+size_t test_dataset_size = 84;
 int log_learning_rate = 5;
 size_t INPUT_SIZE;
 size_t NUM_CLASSES;
@@ -214,6 +214,13 @@ void updateAccuracy(NeuralNetwork<T, Share> *net, std::vector<double> &labels, i
     int nClasses = hostOutput.size() / MINI_BATCH_SIZE;
 
     for(int i = 0; i < MINI_BATCH_SIZE; i++) {
+        std::cout << "label = " << labels[i] << "; ";
+        std::cout << "y_pred = [ ";
+        for(std::vector<double>::iterator it = hostOutput.begin() + (i * nClasses) ; it != hostOutput.begin() + ((i+1) * nClasses) ; ++it){
+            std::cout << *it << ", ";
+        }
+        std::cout << "]" << std::endl;
+
         auto result = std::max_element(hostOutput.begin() + (i * nClasses), hostOutput.begin() + ((i+1) * nClasses));
         int max_index = std::distance(hostOutput.begin(), result);
 
@@ -237,6 +244,7 @@ void test(NeuralNetwork<T, Share> *net, std::ifstream &test_data, std::ifstream 
     int correct = 0;
 
     for (int i = 0; i < numIterations; i++) {
+        std::cout << "Iteration " << i << std::endl;
 
         std::vector<double> batch_data(MINI_BATCH_SIZE * INPUT_SIZE);
         std::vector<double> batch_labels(MINI_BATCH_SIZE * NUM_CLASSES);

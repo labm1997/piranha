@@ -1,0 +1,112 @@
+{
+  "name": "Maia-7_image90x90",
+  "dataset": "KAGGLE",
+  "batch_size": 1,
+  "input_size": 8100,
+  "num_classes": 4,
+  "model": [
+    {
+      "layer": "cnn",
+      "input_hw": [90, 90],
+      "in_channels": 1,
+      "out_channels": 64,
+      "filter_hw": [3, 3],
+      "stride": 1,
+      "padding": 0
+    },
+    {
+      "layer": "relu",
+      "input_dim": 495616
+    },
+    {
+      "layer": "averagepool",
+      "input_hw": [88, 88],
+      "in_channels": 64,
+      "pool_hw": [2, 2],
+      "stride": 2
+    },
+    {
+      "layer": "cnn",
+      "input_hw": [44, 44],
+      "in_channels": 64,
+      "out_channels": 64,
+      "filter_hw": [3, 3],
+      "stride": 1,
+      "padding": 0
+    },
+    {
+      "layer": "relu",
+      "input_dim": 112896
+    },
+    {
+      "layer": "averagepool",
+      "input_hw": [42, 42],
+      "in_channels": 64,
+      "pool_hw": [2, 2],
+      "stride": 2
+    },
+    {
+      "layer": "cnn",
+      "input_hw": [21, 21],
+      "in_channels": 64,
+      "out_channels": 128,
+      "filter_hw": [3, 3],
+      "stride": 1,
+      "padding": 0
+    },
+    {
+      "layer": "relu",
+      "input_dim": 46208
+    },
+    {
+      "layer": "averagepool",
+      "input_hw": [19, 19],
+      "in_channels": 128,
+      "pool_hw": [2, 2],
+      "stride": 2
+    },
+    {
+      "layer": "cnn",
+      "input_hw": [9, 9],
+      "in_channels": 128,
+      "out_channels": 128,
+      "filter_hw": [3, 3],
+      "stride": 1,
+      "padding": 0
+    },
+    {
+      "layer": "relu",
+      "input_dim": 6272
+    },
+    {
+      "layer": "averagepool",
+      "input_hw": [7, 7],
+      "in_channels": 128,
+      "pool_hw": [2, 2],
+      "stride": 2
+    },
+    {
+      "layer": "fc",
+      "input_dim": 1152,
+      "output_dim": 128
+    },
+    {
+      "layer": "relu",
+      "input_dim": 128
+    },
+    {
+      "layer": "fc",
+      "input_dim": 128,
+      "output_dim": 128
+    },
+    {
+      "layer": "relu",
+      "input_dim": 128
+    },
+    {
+      "layer": "fc",
+      "input_dim": 128,
+      "output_dim": 4
+    }
+  ]
+}

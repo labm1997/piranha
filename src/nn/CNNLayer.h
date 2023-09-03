@@ -16,6 +16,7 @@ class CNNLayer : public Layer<T, Share> {
         CNNConfig conf;
 
         Share<T> weights;
+        Share<T> biases;
 
         Share<T> activations;
         Share<T> deltas;
@@ -35,7 +36,7 @@ class CNNLayer : public Layer<T, Share> {
         //Getters
         Share<T> *getActivation() {return &activations;};
         Share<T> *getWeights() {return &weights;};
-        Share<T> *getBiases() {return nullptr;};
+        Share<T> *getBiases() {return &biases;};
         Share<T> *getDelta() {return &deltas;};
 };
 

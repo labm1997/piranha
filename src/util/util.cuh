@@ -150,9 +150,14 @@ void printShareFinite(Share<T, I> &data, const char *name, size_t size, bool con
     copyToHost(data, host_data, convertFixed);
 
     std::cout << name << ":" << std::endl;
+    std::cout << "size: " << data.size() << std::endl;
     int offset = 0;
     for (int i = 0; i < size; i++) {
-        printf("%e ", host_data[offset + i]);
+        printf("%lf ", host_data[offset + i]);
+    }
+    printf(" ... ");
+    for (int i = data.size()-size; i < data.size() && i >= 0; i++) {
+        printf("%lf ", host_data[i]);
     }
     std::cout << std::endl;
 }
@@ -270,6 +275,7 @@ void loadDeviceDataFromFile(std::string filename, DeviceData<T, I> &dest) {
 
 template<typename T, typename I, template<typename, typename...> typename Share>
 void loadShareFromFile(std::string filename, Share<T, I> &dest) {
+    std::cout << "Reading " << filename << std::endl;
 
     std::ifstream f(filename);
     std::istream_iterator<double> f_iterator(f), eos;
@@ -279,8 +285,13 @@ void loadShareFromFile(std::string filename, Share<T, I> &dest) {
     int index = 0;
     while(f_iterator != eos && index < vals.size()) {
         vals[index] = *f_iterator;
+
         f_iterator++;
         index++;
+    }
+
+    if(index >= 1){
+        std::cout << "Last value read " << vals[index-1] << std::endl;
     }
 
     f.close();

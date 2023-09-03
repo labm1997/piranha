@@ -3,7 +3,7 @@
     "num_parties": 3,
 
     "_desc_party_ips": "IP addresses of each party, ordered by party number",
-    "party_ips": ["127.0.0.1", "127.0.0.1", "127.0.0.1"],
+    "party_ips": ["127.0.0.1", "127.0.0.1", "127.0.0.1", "127.0.0.1"],
 
     "_desc_party_users": "Usernames for each party, ordered by party number. Can be used by scripts to SSH into machines if necessary to start piranha processes",
     "party_users": [],
@@ -27,7 +27,7 @@
     "run_name": "piranha_localhost",
 
     "_desc_network": "Path to NN architecture to use for the run",
-    "network": "files/models/maia-covid.json",
+    "network": "files/models/maia-7-90x90-covid.json",
 
     "_desc_custom_epochs": "Enable custom number of epochs. Otherwise set by size of learning rate schedule",
     "custom_epochs": true,
@@ -51,16 +51,16 @@
     "nn_seed": 343934585,
 
     "_desc_preload": "Preload weights from a snapshot directory instead of training from scratch",
-    "preload": false,
+    "preload": true,
 
     "_desc_preload_path": "Directory path from which to preload network weights",
-    "preload_path": "",
+    "preload_path": "./files/preload/Maia-7_image90x90/",
 
     "_desc_lr_schedule": "Learning rate schedule, in negative powers of 2 (e.g. 3 -> learning rate of 2^-3). Assumes that the number of LR exponents matches the desired number of training epochs",
     "lr_schedule": [3, 3, 3, 4, 4, 5, 6, 7, 8, 9],
 
     "_desc_test_only": "Only run NN test, skip training (useful if weights have been preloaded)",
-    "test_only": false,
+    "test_only": true,
 
     "_desc_inference_only": "Only run inference (forward pass), not backward pass training",
     "inference_only": false,
@@ -99,14 +99,14 @@
     "eval_epoch_stats": true,
 
     "_desc_print_activations": "Print output activations for each layer every forward pass",
-    "print_activations": false,
+    "print_activations": true,
 
     "_desc_print_deltas": "Print input gradient to each layer every backward pass",
     "print_deltas": false,
     
     "_desc_debug_all_forward": "Print debug information for all layer forward passes",
-    "debug_all_forward": true,
+    "debug_all_forward": false,
 
     "_desc_debug_all_backward": "Print debug information for all layer backward passes",
-    "debug_all_backward": true
+    "debug_all_backward": false
 }

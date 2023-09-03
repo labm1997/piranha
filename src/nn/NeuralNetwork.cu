@@ -125,8 +125,11 @@ void NeuralNetwork<T, Share>::forward(std::vector<double> &data) {
 	    layers[i]->forward(*(layers[i-1]->getActivation()));
 	}
 
-    if (piranha_config["print_activations"]) {
-        printShareFinite(*(layers[layers.size()-1]->getActivation()), "output activation", 10);
+	for (size_t i = 1; i < layers.size(); ++i) {
+        if (piranha_config["print_activations"]) {
+            std::cout << "Layer " << i << std::endl;
+            printShareFinite(*(layers[i]->getActivation()), "output activation", 10);
+        }
     }
 
     log_print("NN.forward_done");
